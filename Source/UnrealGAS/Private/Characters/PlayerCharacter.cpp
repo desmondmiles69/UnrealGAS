@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 
 #include "AbilitySystemComponent.h"
+#include "AbilitySystem/CustomAttributeSet.h"
 #include "Player/BorisPlayerState.h"
 
 // Sets default values
@@ -63,7 +64,17 @@ void APlayerCharacter::PossessedBy(AController* NewController)
 	}
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+	OnAscInitilized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
 	GiveStartupAbilities();
+	InitilizeAttributes();
+
+	UCustomAttributeSet* AttributeSet = Cast<UCustomAttributeSet>(GetAttributeSet());
+	if(!IsValid(AttributeSet))
+	{
+		return;
+	}
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
 }
 
 void APlayerCharacter::OnRep_PlayerState()
@@ -76,5 +87,24 @@ void APlayerCharacter::OnRep_PlayerState()
 	}
 
 	GetAbilitySystemComponent()->InitAbilityActorInfo(GetPlayerState(), this);
+	OnAscInitilized.Broadcast(GetAbilitySystemComponent(), GetAttributeSet());
+	
+	UCustomAttributeSet* AttributeSet = Cast<UCustomAttributeSet>(GetAttributeSet());
+	if(!IsValid(AttributeSet))
+	{
+		return;
+	}
+	
+	GetAbilitySystemComponent()->GetGameplayAttributeValueChangeDelegate(AttributeSet->GetHealthAttribute()).AddUObject(this, &ThisClass::OnHealthChanged);
+}
+
+UAttributeSet* APlayerCharacter::GetAttributeSet() const
+{
+	ABorisPlayerState* playerState = Cast<ABorisPlayerState>(GetPlayerState());
+	if(!IsValid(playerState))
+	{
+		return nullptr;
+	}
+	return playerState->GetAttributeSet();
 }
 

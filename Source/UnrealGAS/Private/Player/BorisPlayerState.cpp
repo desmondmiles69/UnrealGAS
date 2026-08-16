@@ -2,15 +2,18 @@
 
 
 #include "Player/BorisPlayerState.h"
-#include "AbilitySystemComponent.h"
+#include "AbilitySystem/CustomAbilitySystemComponent.h"
+#include "AbilitySystem/CustomAttributeSet.h"
 
 ABorisPlayerState::ABorisPlayerState()
 {
 	 SetNetUpdateFrequency(100.f);
 
-	AbilitySystemComponent = CreateDefaultSubobject<UAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
+	AbilitySystemComponent = CreateDefaultSubobject<UCustomAbilitySystemComponent>(TEXT("AbilitySystemComponent"));
 	AbilitySystemComponent->SetIsReplicated(true);
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
+
+	AttributeSet = CreateDefaultSubobject<UCustomAttributeSet>(TEXT("AttributeSet"));
 }
 
 UAbilitySystemComponent* ABorisPlayerState::GetAbilitySystemComponent() const

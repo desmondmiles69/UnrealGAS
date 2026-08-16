@@ -17,6 +17,7 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+	virtual UAttributeSet* GetAttributeSet() const override;
 	
 protected:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
