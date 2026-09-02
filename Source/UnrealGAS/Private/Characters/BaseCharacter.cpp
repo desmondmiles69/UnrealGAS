@@ -49,6 +49,20 @@ void ABaseCharacter::InitilizeAttributes() const
 	Cast<UCustomAttributeSet>(GetAttributeSet())->PostAttributesInitilized();
 }
 
+void ABaseCharacter::ResetAttributes()
+{
+	checkf(IsValid(ResetAttributesEffect), TEXT("ResetAttributesEffect is not set"));
+
+	// if(!HasAuthority())
+	// {
+	// 	return;
+	// }
+
+	FGameplayEffectContextHandle effectContextHandle = GetAbilitySystemComponent()->MakeEffectContext();
+	FGameplayEffectSpecHandle effectSpecHandle = GetAbilitySystemComponent()->MakeOutgoingSpec(ResetAttributesEffect, 1.f, effectContextHandle);
+	GetAbilitySystemComponent()->ApplyGameplayEffectSpecToSelf(*effectSpecHandle.Data.Get());
+}
+
 void ABaseCharacter::OnHealthChanged(const FOnAttributeChangeData& ArrtibuteChangeData)
 {
 	if(ArrtibuteChangeData.NewValue <= 0.f)

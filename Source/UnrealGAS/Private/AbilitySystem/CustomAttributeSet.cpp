@@ -20,7 +20,10 @@ void UCustomAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 void UCustomAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
-	//PostAttributesInitilized();
+
+	
+	
+	PostAttributesInitilized();
 }
 
 void UCustomAttributeSet::OnRep_AttributesInitilized()
